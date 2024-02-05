@@ -61,13 +61,40 @@ svg.append("g")
 svg.append("g")
     .call(d3.axisLeft(functionThatConvertsMonthToYCoordinates));
 
-svg.selectAll("rect")
+/*svg.selectAll("rect")
     .data(weatherData[0].averageHighByMonth) // (Hardcoded) only Urbana’s data
     .join("rect")
     .attr("x", (dataPoint, i) => functionThatConvertsMonthToXCoordinates(MONTHS[i])) // i is dataPoint’s index in the data array
     .attr("y", (dataPoint) => functionThatConvertsMonthToYCoordinates(dataPoint))
     .attr("width", functionThatConvertsMonthToXCoordinates.bandwidth())
     .attr("height", (dataPoint) => height - functionThatConvertsMonthToYCoordinates(dataPoint))
-    .attr("fill", "steelblue");
+    .attr("fill", "steelblue"); */
 
 console.log("done");
+
+function populateDropdown() {
+
+    const select = d3.select("select");
+    // TODO create <option>s as children of the <select>, one for each city
+
+    select.on("change", changeEvent => {
+        // Runs when the dropdown is changed
+        console.log(changeEvent.target.selectedIndex); // The newly selected index
+    });
+
+    const selectedCity = select.property("value");
+    const selectedData = weatherData.find(cityData => cityData.city === selectedCity);
+
+    svg.selectAll("rect").remove(); // Remove existing bars
+
+    svg.selectAll("rect")
+        .data(selectedData.averageHighByMonth)
+        .join("rect")
+        .attr("x", (dataPoint, i) => functionThatConvertsMonthToXCoordinates(MONTHS[i]))
+        .attr("y", (dataPoint) => functionThatConvertsMonthToYCoordinates(dataPoint))
+        .attr("width", functionThatConvertsMonthToXCoordinates.bandwidth())
+        .attr("height", (dataPoint) => height - functionThatConvertsMonthToYCoordinates(dataPoint))
+        .attr("fill", "steelblue");
+}
+
+populateDropdown();
