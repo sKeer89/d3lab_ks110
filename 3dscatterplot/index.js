@@ -13,7 +13,7 @@ const spheres = scene.selectAll('a-sphere')
     .enter()
     .append('a-sphere')
     .attr('class', 'clickable') // Add the clickable class
-    .attr('radius', d => zScale(d.petal_width) * 0.06)
+    .attr('radius', 0.10)
     .attr('position', d => {
         if (d.type == 'Iris-pinkasa') {
             console.log(d.type, xScale(d.sepal_width), yScale(d.petal_length), zScale(d.petal_width));
@@ -34,6 +34,36 @@ const spheres = scene.selectAll('a-sphere')
         console.log('Left sphere');
         // You can perform actions when leaving the sphere
     });
+
+const data = [
+    { color: 'red', category: 'Iris-setosa' },
+    { color: 'green', category: 'Iris-versicolor' },
+    { color: 'blue', category: 'Iris-virginica' },
+    { color: 'grey', category: 'Iris-pinkasa' }
+];
+
+const legend = d3.select("#legend");
+const legendItems = legend.selectAll(".legend-item")
+    .data(data)
+    .enter()
+    .append("div")
+    .attr("class", "legend-item");
+
+legendItems.append("div")
+    .style("width", "20px")
+    .style("height", "20px")
+    .style("border-radius", "50%")
+    .style("background-color", d => d.color)
+    .style("display", "inline-block")
+    .style("margin-right", "5px")
+    .style("margin-left", "25px")
+    .style("margin-top", "2px")
+    .style("margin-bottom", "2px");
+
+legendItems.append("div")
+    .text(d => d.category)
+    .style("display", "inline-block")
+    .style("color", "black");
 
 
 
