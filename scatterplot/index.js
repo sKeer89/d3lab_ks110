@@ -86,16 +86,15 @@ const values = [{
 }, ];
 
 // Set up the dimensions of the chart
-const width = 500;
+const width = 300;
 const height = 300;
 const margin = {
     top: 20,
     right: 20,
-    bottom: 30,
+    bottom: 40,
     left: 40
 };
 
-// Create SVG element
 const svg = d3.select("body")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -103,29 +102,49 @@ const svg = d3.select("body")
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Create scales for x and y axes
-const xScale = d3.scaleLinear()
+const functionThatConvertsHeightToXCoordinates = d3.scaleLinear()
     .domain([62, 74])
     .range([0, width]);
 
-const yScale = d3.scaleLinear()
+const functionThatConvertsHeightToYCoordinates = d3.scaleLinear()
     .domain([110, 200])
     .range([height, 0]);
 
-// Add x-axis
 svg.append("g")
     .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(xScale));
+    .call(d3.axisBottom(functionThatConvertsHeightToXCoordinates));
 
-// Add y-axis
 svg.append("g")
-    .call(d3.axisLeft(yScale));
+    .call(d3.axisLeft(functionThatConvertsHeightToYCoordinates));
 
-// Add dots to represent data points
 svg.selectAll(".dot")
     .data(values)
     .enter().append("circle")
     .attr("class", "dot")
-    .attr("cx", d => xScale(d.x))
-    .attr("cy", d => yScale(d.y))
-    .attr("r", 5); // radius of the dots
+    .attr("cx", d => functionThatConvertsHeightToXCoordinates(d.x))
+    .attr("cy", d => functionThatConvertsHeightToYCoordinates(d.y))
+    .attr("r", 5);
+
+svg.append("text")
+    .attr("font-size", 10)
+    .attr("font-weight", "bold")
+    .attr("font-family", "sans-serif")
+    .attr("x", width / 2)
+    .attr("y", height + 30)
+    .attr("text-anchor", "middle") // Center the text horizontally
+    .text("Height (in)");
+
+
+
+
+svg.append("text")
+    .attr("font-size", 10)
+    .attr("font-weight", "bold")
+    .attr("font-family", "sans-serif")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - (margin.left))
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("fill", "black")
+    .text("Weigth (Lb)");

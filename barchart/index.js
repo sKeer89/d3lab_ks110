@@ -6,8 +6,6 @@
 const width = 500;
 const height = 300;
 
-
-
 const weatherData = [{
         city: "Urbana, USA",
         averageHighByMonth: [32.9, 37.7, 49.9, 62.8, 73.4, 82.5, 85.0, 83.7, 78.2, 65.2, 50.6, 36.7]
@@ -125,5 +123,17 @@ function populateDropdown() {
                 .style("opacity", 0);
         });
 }
+
+svg.append("text")
+    .attr("font-size", 10)
+    .attr("font-weight", "bold")
+    .attr("font-family", "sans-serif")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - (margin.left))
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("fill", "black")
+    .text("Average High Temperature (F)");
 
 populateDropdown();
