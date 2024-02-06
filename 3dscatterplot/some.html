@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>3D Scatter Plot</title>
+</head>
+
+<body>
+
+    <a-scene background="color: #ECECEC">
+
+        <!-- Axes Labels -->
+        <a-entity position="-5 0 0" text="value: Sepal Width; align: center;"></a-entity>
+        <a-entity position="0 -5 0" text="value: Petal Length; align: center; rotation: -90 0 0;"></a-entity>
+        <a-entity position="0 0 -5" text="value: Petal Width; align: center; rotation: 0 90 0;"></a-entity>
+
+        <!-- Data Spheres -->
+        <script>
+            // Sample data for the 3D scatter plot
+            const data = [{
+                    sepalWidth: 3.5,
+                    petalLength: 1.4,
+                    petalWidth: 0.2,
+                    species: 'setosa'
+                }, {
+                    sepalWidth: 3.0,
+                    petalLength: 4.5,
+                    petalWidth: 1.5,
+                    species: 'versicolor'
+                }, {
+                    sepalWidth: 2.5,
+                    petalLength: 5.0,
+                    petalWidth: 2.0,
+                    species: 'virginica'
+                },
+                // Add more data points as needed
+            ];
+
+            // Set up the dimensions for the scatter plot
+            const xScale = d3.scaleLinear()
+                .domain([2, 4]) // Set the domain based on your data
+                .range([-5, 5]); // Set the range based on your scene
+
+            const yScale = d3.scaleLinear()
+                .domain([1, 6]) // Set the domain based on your data
+                .range([-5, 5]); // Set the range based on your scene
+
+            const zScale = d3.scaleLinear()
+                .domain([0, 3]) // Set the domain based on your data
+                .range([-5, 5]); // Set the range based on your scene
+
+            // Create data spheres
+            const scene = document.querySelector('a-scene');
+
+            data.forEach(d => {
+                const sphere = document.createElement('a-sphere');
+                sphere.setAttribute('radius', 0.2); // Set the desired size
+                sphere.setAttribute('color', getColorBySpecies(d.species));
+                sphere.setAttribute('position', `${xScale(d.sepalWidth)} ${yScale(d.petalLength)} ${zScale(d.petalWidth)}`);
+                scene.appendChild(sphere);
+            });
+
+            // Function to get color based on species
+            function getColorBySpecies(species) {
+                switch (species) {
+                    case 'setosa':
+                        return 'red';
+                    case 'versicolor':
+                        return 'green';
+                    case 'virginica':
+                        return 'blue';
+                    default:
+                        return 'gray';
+                }
+            }
+        </script>
+
+    </a-scene>
+
+</body>
+
+</html>

@@ -6,6 +6,8 @@
 const width = 500;
 const height = 300;
 
+
+
 const weatherData = [{
         city: "Urbana, USA",
         averageHighByMonth: [32.9, 37.7, 49.9, 62.8, 73.4, 82.5, 85.0, 83.7, 78.2, 65.2, 50.6, 36.7]
@@ -53,6 +55,16 @@ const svg = d3.select("body")
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+const tooltip1 = d3.select("body").append("div")
+    .attr("id", "myTooltip")
+    .attr("class", "tooltip")
+    .style("opacity", 1)
+    .style("background-color", "pink")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+    .style("position", "absolute");
 svg.append("g")
     .attr("transform", `translate(0, ${height})`)
     .call(d3.axisBottom(functionThatConvertsMonthToXCoordinates));
@@ -95,6 +107,23 @@ function populateDropdown() {
         .attr("width", functionThatConvertsMonthToXCoordinates.bandwidth())
         .attr("height", (dataPoint) => height - functionThatConvertsMonthToYCoordinates(dataPoint))
         .attr("fill", "steelblue");
+    const rectSelection = svg.selectAll("rect");
+
+    rectSelection
+        .on("mouseover", function(mouseEvent, d) {
+            const [mouseX, mouseY] = d3.pointer(mouseEvent);
+            tooltip1.transition()
+                .duration(300)
+                .style("opacity", 1);
+            tooltip1.html(`Temperature: ${d}°C`)
+                .style("left", `${mouseX + 5}px`)
+                .style("top", `${mouseY + 5}px`);
+        })
+        .on("mouseout", function(d) {
+            tooltip1.transition()
+                .duration(350)
+                .style("opacity", 0);
+        });
 }
 
 populateDropdown();
